@@ -4,13 +4,11 @@ import java.util.Objects;
 
 public class Ligth {
 
-    private int hauteur;
-    private int largeur;
+    private Coordonnees coordonnees;
     private boolean isOn;
 
     public Ligth(int hauteur, int largeur) {
-        this.hauteur = hauteur;
-        this.largeur = largeur;
+        this.coordonnees = new Coordonnees(hauteur, largeur);
     }
 
     @Override
@@ -18,13 +16,21 @@ public class Ligth {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ligth ligth = (Ligth) o;
-        return hauteur == ligth.hauteur &&
-                largeur == ligth.largeur;
+        return isOn == ligth.isOn &&
+                Objects.equals(coordonnees, ligth.coordonnees);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(hauteur, largeur);
+        return Objects.hash(coordonnees, isOn);
+    }
+
+    public int getHauteur() {
+        return coordonnees.getHauteur();
+    }
+
+    public int getLargeur() {
+        return coordonnees.getLargeur();
     }
 
     public boolean isOn() {
@@ -33,5 +39,12 @@ public class Ligth {
 
     public void turnOn() {
         isOn = true;
+    }
+
+    public boolean isInRange(Coordonnees coordonnees1, Coordonnees coordonnees2) {
+        return coordonnees.getHauteur() >= coordonnees1.getHauteur() &&
+        coordonnees.getHauteur() <= coordonnees2.getHauteur() &&
+                coordonnees.getLargeur() >= coordonnees1.getLargeur() &&
+                coordonnees.getLargeur() <= coordonnees2.getLargeur();
     }
 }

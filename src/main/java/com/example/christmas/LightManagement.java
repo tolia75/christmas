@@ -2,6 +2,7 @@ package com.example.christmas;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LightManagement {
 
@@ -16,7 +17,14 @@ public class LightManagement {
         return ligths;
     }
 
-    public void turnOn(List<Ligth> ligths) {
+    public void turnOnAll(List<Ligth> ligths) {
         ligths.forEach(Ligth::turnOn);
+    }
+
+    public void turnOnSelectedLights(List<Ligth> ligths, Coordonnees coordonnees1, Coordonnees coordonnees2) {
+        ligths.stream()
+                .filter(ligth -> ligth.isInRange(coordonnees1, coordonnees2))
+                .collect(Collectors.toList())
+                .forEach(Ligth::turnOn);
     }
 }
