@@ -34,7 +34,7 @@ class LightManagementTest {
     }
 
     @Test
-    void shouldLightOnEveryLight() {
+    void shouldTurnOnEveryLight() {
         List<Ligth> ligths = lightManagement.createLigth();
 
         lightManagement.turnOnAll(ligths);
@@ -43,7 +43,7 @@ class LightManagementTest {
     }
 
     @Test
-    void shouldLightOnOneLightFromSelectedAreas() {
+    void shouldTurnOnOneLightFromSelectedAreas() {
         Coordonnees coordonnees1 = new Coordonnees(0,0);
         Coordonnees coordonnees2 = new Coordonnees(0,0);
 
@@ -62,7 +62,7 @@ class LightManagementTest {
     }
 
     @Test
-    void shouldLightOnAllLightsWithSelectedAreas() {
+    void shouldTurnOnAllLightsWithSelectedAreas() {
         Coordonnees coordonnees1 = new Coordonnees(0,0);
         Coordonnees coordonnees2 = new Coordonnees(999,999);
         List<Ligth> ligths = lightManagement.createLigth();
@@ -70,6 +70,61 @@ class LightManagementTest {
         lightManagement.turnOnSelectedLights(ligths, coordonnees1, coordonnees2);
 
         assertTrue(ligths.stream().allMatch(Ligth::isOn));
+    }
+
+    @Test
+    void shouldTurnOnAllLightsFromSelectedAreas() {
+        Coordonnees coordonnees1 = new Coordonnees(0,0);
+        Coordonnees coordonnees2 = new Coordonnees(999,0);
+        List<Ligth> ligths = lightManagement.createLigth();
+
+        lightManagement.turnOnSelectedLights(ligths, coordonnees1, coordonnees2);
+
+        ligths.stream()
+                .filter(ligth -> ligth.getHauteur() >= 0  && ligth.getHauteur() <= 999
+                        && ligth.getLargeur() <= 0)
+                .collect(Collectors.toList())
+                .forEach(ligth -> assertTrue(ligth.isOn()));
+        ligths.stream()
+                .filter(ligth -> ligth.getLargeur() != 0)
+                .collect(Collectors.toList())
+                .forEach(ligth -> assertFalse(ligth.isOn()));
+    }
+
+    @Test
+    void shouldTurnOnAllLightsFromSelectedAreasAndTurnOffTheOther() {
+        // When
+        Coordonnees coordonnees1 = new Coordonnees(0,0);
+        Coordonnees coordonnees2 = new Coordonnees(999,0);
+        List<Ligth> ligths = lightManagement.createLigth();
+
+        lightManagement.turnOnSelectedLights(ligths, coordonnees1, coordonnees2);
+
+        ligths.stream()
+                .filter(ligth -> ligth.getHauteur() >= 0  && ligth.getHauteur() <= 999
+                        && ligth.getLargeur() <= 0)
+                .collect(Collectors.toList())
+                .forEach(ligth -> assertTrue(ligth.isOn()));
+        ligths.stream()
+                .filter(ligth -> ligth.getLargeur() != 0)
+                .collect(Collectors.toList())
+                .forEach(ligth -> assertFalse(ligth.isOn()));
+
+        Coordonnees coordonnees3 = new Coordonnees(0,0);
+        Coordonnees coordonnees4 = new Coordonnees(0,999);
+
+        // When
+        lightManagement.turnOnSelectedLights(ligths, coordonnees3, coordonnees4);
+
+        // Assert
+        ligths.stream()
+                .filter(ligth -> ligth.getHauteur() <= 0 && ligth.getLargeur() >= 0 && ligth.getLargeur() <= 999)
+                .collect(Collectors.toList())
+                .forEach(ligth -> assertTrue(ligth.isOn()));
+        ligths.stream()
+                .filter(ligth -> ligth.getHauteur() != 0)
+                .collect(Collectors.toList())
+                .forEach(ligth -> assertFalse(ligth.isOn()));
     }
 
 }

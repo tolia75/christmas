@@ -26,5 +26,10 @@ public class LightManagement {
                 .filter(ligth -> ligth.isInRange(coordonnees1, coordonnees2))
                 .collect(Collectors.toList())
                 .forEach(Ligth::turnOn);
+
+        ligths.stream()
+                .filter(ligth -> ligth.isNotInRange(coordonnees1, coordonnees2))
+                .collect(Collectors.toList())
+                .forEach(Ligth::turnOff);
     }
 }

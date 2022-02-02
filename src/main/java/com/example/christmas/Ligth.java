@@ -41,10 +41,17 @@ public class Ligth {
         isOn = true;
     }
 
+    public void turnOff() {
+        isOn = false;
+    }
     public boolean isInRange(Coordonnees coordonnees1, Coordonnees coordonnees2) {
         return coordonnees.getHauteur() >= coordonnees1.getHauteur() &&
         coordonnees.getHauteur() <= coordonnees2.getHauteur() &&
                 coordonnees.getLargeur() >= coordonnees1.getLargeur() &&
                 coordonnees.getLargeur() <= coordonnees2.getLargeur();
+    }
+
+    public boolean isNotInRange(Coordonnees coordonnees1, Coordonnees coordonnees2) {
+        return !isInRange(coordonnees1, coordonnees2);
     }
 }
